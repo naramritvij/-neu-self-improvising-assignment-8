@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "info7375-search-r1-team"
+version = "0.2.0"
+description = "Compact LoRA Search-R1 course implementation, Ritvij and Ghouse"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+include = ["search_r1_team*"]

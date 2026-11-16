@@ -218,3 +218,24 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Assignment 8: credentials, data, model weights and upstream working copies
+.env.*
+!.env.example
+.modal.toml
+.modal/
+*.pem
+*.key
+/data/
+/runs/
+/vendor/
+/checkpoints/
+/downloaded-runs/
+*.safetensors
+*.pt
+*.pth
+*.bin
+*.index
+*.offsets
+*.zip
+.DS_Store

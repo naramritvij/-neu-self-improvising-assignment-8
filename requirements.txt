@@ -1,0 +1,10 @@
+# Conservative reproducibility environment; GPU installation is NOT validated here.
+# Install a CUDA-compatible PyTorch build separately (Modal image pins torch below).
+transformers==4.51.3
+peft==0.15.2
+accelerate==1.6.0
+datasets==3.5.0
+huggingface-hub==0.30.2
+safetensors==0.5.3
+numpy==2.2.4
+matplotlib==3.10.1

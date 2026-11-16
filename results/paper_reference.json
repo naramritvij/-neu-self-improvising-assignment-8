@@ -1,0 +1,14 @@
+{
+  "kind": "published_reference_not_measured",
+  "source": "https://arxiv.org/html/2503.09516v5",
+  "model": "Qwen2.5-3B-Instruct",
+  "dataset": "Bamboogle",
+  "metric": "EM",
+  "scale": "fraction",
+  "rows": [
+    {"method": "Direct Inference", "table": 2, "em": 0.024},
+    {"method": "Search-R1-instruct (PPO)", "table": [2, 3], "em": 0.264},
+    {"method": "Search-R1-instruct (GRPO)", "table": 3, "em": 0.232}
+  ],
+  "note": "Original paper scores, NOT measured LoRA results for this project."
+}

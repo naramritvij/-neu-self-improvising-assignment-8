@@ -1,0 +1,10 @@
+{
+  "algorithm": "grpo", "model_id": "Qwen/Qwen2.5-3B-Instruct", "model_revision": "main",
+  "seed": 42, "steps": 2, "prompts_per_step": 1, "group_size": 2, "update_epochs": 1,
+  "learning_rate": 0.00002, "critic_learning_rate": 0.0001, "clip": 0.2, "value_clip": 0.2,
+  "kl_beta": 0.001, "gamma": 1.0, "gae_lambda": 0.95, "max_grad_norm": 1.0,
+  "lora_rank": 16, "lora_alpha": 32, "max_action_tokens": 1024, "max_context_tokens": 4096,
+  "max_turn_tokens": 512, "max_searches": 3, "max_observation_tokens": 768, "top_k": 3,
+  "eval_every": 0, "validation_limit": 32, "save_every": 1, "gradient_checkpointing": true,
+  "critic_warmup_steps": 1
+}
