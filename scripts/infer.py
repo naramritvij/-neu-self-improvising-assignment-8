@@ -9,7 +9,7 @@ from search_r1_team.config import Config
 from search_r1_team.data import read_jsonl
 from search_r1_team.model import HFPolicy
 from search_r1_team.retrieval import HTTPRetriever
-from search_r1_team.rollout import run_episode
+from search_r1_team.rollout import run_episodes
 from search_r1_team.runtime import environment,seed_all,sha256,write_json
 
 METHODS=['direct','own_grpo','own_ppo','released_grpo','released_ppo']
@@ -24,6 +24,7 @@ def main():
     p.add_argument('--retrieval-url'); p.add_argument('--corpus-id'); p.add_argument('--retriever-id')
     p.add_argument('--limit',type=int,help='Diagnostic only; never reported as the full benchmark')
     p.add_argument('--resume',action='store_true')
+    p.add_argument('--batch-size',type=int,default=25,help='questions generated together per batch')
     p.add_argument('--device',choices=['cuda','cpu'],default='cuda',help='cpu is for dry runs with a small model')
     a=p.parse_args()
     if a.limit is not None and a.limit<1: p.error('Diagnostic limit must be positive')
@@ -73,18 +74,21 @@ def main():
         'prompt_parity':'documented_compact_prompt_not_exact_flashrag_baseline'}
     write_json(a.output/'manifest.json',manifest)
     try:
-        for row in selected:
-            if row['id'] in done: continue
-            start=time.monotonic()
-            tr=run_episode(policy,row['question'],cfg,retriever=retrieval,sample=False)
-            # Persist trace first, then prediction. An interrupted tail can be rerun deterministically.
-            write_json(a.output/'traces'/f'{row["id"]}.json',{
-                'id':row['id'],'question':row['question'],'events':tr.events,
-                'stop_reason':tr.stop_reason,'action_tokens':len(tr.action_positions)})
-            with (a.output/'predictions.jsonl').open('a',encoding='utf-8') as f:
-                f.write(json.dumps({'id':row['id'],'prediction':tr.response,
-                    'stop_reason':tr.stop_reason,'seconds':time.monotonic()-start},ensure_ascii=False)+'\n'); f.flush()
-            done.add(row['id']); print(f'{a.method}: {len(done)}/{len(selected)}',flush=True)
+        todo=[row for row in selected if row['id'] not in done]
+        for i in range(0,len(todo),a.batch_size):
+            chunk=todo[i:i+a.batch_size]; start=time.monotonic()
+            trs=run_episodes(policy,[row['question'] for row in chunk],cfg,retriever=retrieval,sample=False)
+            seconds=(time.monotonic()-start)/len(chunk)
+            for row,tr in zip(chunk,trs):
+                # Persist trace first, then prediction. An interrupted tail can be rerun deterministically.
+                write_json(a.output/'traces'/f'{row["id"]}.json',{
+                    'id':row['id'],'question':row['question'],'events':tr.events,
+                    'stop_reason':tr.stop_reason,'action_tokens':len(tr.action_positions)})
+                with (a.output/'predictions.jsonl').open('a',encoding='utf-8') as f:
+                    f.write(json.dumps({'id':row['id'],'prediction':tr.response,
+                        'stop_reason':tr.stop_reason,'seconds':seconds},ensure_ascii=False)+'\n'); f.flush()
+                done.add(row['id'])
+            print(f'{a.method}: {len(done)}/{len(selected)}',flush=True)
         manifest['status']='completed'
     except Exception as exc:
         manifest['status']='failed'; manifest['error_type']=type(exc).__name__

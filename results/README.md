@@ -1,8 +1,8 @@
 # Results
 
-REPORT.md is deliberately marked pending. No model experiment has run.
-The paper_reference.json values are published references, not team measurements.
+- `summary.json`: measured EM, coverage, stop reasons and search counts for every evaluation, and per-run training statistics (from `scripts/summarize_results.py`).
+- `traces/`: selected full search traces from the released-checkpoint evaluations.
+- `paper_reference.json`: published Search-R1 numbers (references, not our measurements).
+- `training_curves.png`: training reward and searches per rollout for the LoRA runs (added when training finishes).
 
-After actual runs, use scripts/build_report.py to create the comparison and figures
-from complete prediction/metric files. Do not insert synthetic fixtures into this
-folder as experiment evidence. Keep large checkpoints and raw corpora outside Git.
+See the top-level README for the results table and discussion.

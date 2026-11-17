@@ -21,8 +21,11 @@ def create_app(assets: Path,device: str='cpu'):
     index=faiss.read_index(str(assets/'e5_Flat.index'))
     if index.ntotal!=len(corpus): raise ValueError('Index/corpus row counts differ; cannot safely map retrieved passages')
     encoder=info['encoder']
-    tokenizer=AutoTokenizer.from_pretrained(encoder['id'],revision=encoder['revision'])
-    model=AutoModel.from_pretrained(encoder['id'],revision=encoder['revision']).to(device).eval()
+    # Prefer the encoder snapshot saved next to the index (same revision, no network needed).
+    local=encoder.get('local_path')
+    source,revision=(local,None) if local and Path(local).exists() else (encoder['id'],encoder['revision'])
+    tokenizer=AutoTokenizer.from_pretrained(source,revision=revision)
+    model=AutoModel.from_pretrained(source,revision=revision).to(device).eval()
     lock=threading.Lock(); app=FastAPI(); expected=os.environ.get('RETRIEVAL_API_KEY','')
     def authenticate(request):
         if expected and not hmac.compare_digest(request.headers.get('Authorization',''),'Bearer '+expected):

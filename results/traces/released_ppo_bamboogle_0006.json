@@ -1,0 +1,63 @@
+{
+  "id": "bamboogle_0006",
+  "question": "When did the president who set the precedent of a two term limit enter office?",
+  "events": [
+    {
+      "kind": "generation",
+      "turn": 0,
+      "text": "<think]To answer this question, I need to first identify the president who set the precedent of a two-term limit. This information isn't immediately clear, so I will start by searching for it.\n<search>president two-term limit precedent</search>\n",
+      "tokens": 53,
+      "action": "search"
+    },
+    {
+      "kind": "retrieval",
+      "query": "president two-term limit precedent",
+      "passage_ids": [
+        "2180839",
+        "2180844",
+        "2952207"
+      ],
+      "contents": [
+        "\"Twenty-second Amendment to the United States Constitution\"\nTwenty-second Amendment to the United States Constitution The Twenty-second Amendment (Amendment XXII) to the United States Constitution sets a limit on the number of times an individual is eligible for election to the office of President of the United States, and also sets additional eligibility conditions for presidents who succeed to the unexpired terms of their predecessors. Prior to the ratification of the amendment, the president had not been subject to term limits, but George Washington had established a two-term tradition that many other presidents had followed. In the 1940 presidential election, Franklin D. Roosevelt became the first president to",
+        "\"Twenty-second Amendment to the United States Constitution\"\nat his decision to retire after two terms, and have, according to political scientist Bruce Peabody, \"\"argued he had established a \"\"two-term tradition\"\" that served as a vital check against any one person, or the presidency as a whole, accumulating too much power\"\". Numerous amendments aimed toward changing informal precedent into constitutional law were proposed in Congress during the early to mid-19th century, but none passed. Three of the next four presidents after Jefferson—James Madison, James Monroe, and Andrew Jackson—served two terms, and each one adhered to the two-term principle; Martin Van Buren was the only president between Jackson and",
+        "\"Term limits in the United States\"\nTerm limits in the United States Term limits in the United States apply to many offices at both the federal and state level, and date back to the American Revolution. Term limits, also referred to as \"\"rotation in office\"\", restrict the number of terms of office an officeholder may hold. For example, according to the 22nd Amendment, the President of the United States can serve two four-year terms and serve no more than 10 years. Term limits date back to the American Revolution, and prior to that to the democracies and republics of antiquity. The council of 500 in ancient"
+      ],
+      "turn": 0,
+      "inserted_tokens": 430,
+      "inserted_text": "\n<information>Doc 1(Title: \"Twenty-second Amendment to the United States Constitution\") Twenty-second Amendment to the United States Constitution The Twenty-second Amendment (Amendment XXII) to the United States Constitution sets a limit on the number of times an individual is eligible for election to the office of President of the United States, and also sets additional eligibility conditions for presidents who succeed to the unexpired terms of their predecessors. Prior to the ratification of the amendment, the president had not been subject to term limits, but George Washington had established a two-term tradition that many other presidents had followed. In the 1940 presidential election, Franklin D. Roosevelt became the first president to\nDoc 2(Title: \"Twenty-second Amendment to the United States Constitution\") at his decision to retire after two terms, and have, according to political scientist Bruce Peabody, \"\"argued he had established a \"\"two-term tradition\"\" that served as a vital check against any one person, or the presidency as a whole, accumulating too much power\"\". Numerous amendments aimed toward changing informal precedent into constitutional law were proposed in Congress during the early to mid-19th century, but none passed. Three of the next four presidents after Jefferson—James Madison, James Monroe, and Andrew Jackson—served two terms, and each one adhered to the two-term principle; Martin Van Buren was the only president between Jackson and\nDoc 3(Title: \"Term limits in the United States\") Term limits in the United States Term limits in the United States apply to many offices at both the federal and state level, and date back to the American Revolution. Term limits, also referred to as \"\"rotation in office\"\", restrict the number of terms of office an officeholder may hold. For example, according to the 22nd Amendment, the President of the United States can serve two four-year terms and serve no more than 10 years. Term limits date back to the American Revolution, and prior to that to the democracies and republics of antiquity. The council of 500 in ancient</information>\n"
+    },
+    {
+      "kind": "generation",
+      "turn": 1,
+      "text": "<think]From the information provided, it seems Franklin D. Roosevelt became the first president to set the precedent of a two-term limit. Now, I need to find out when he entered office.\n<search>Franklin D. Roosevelt inauguration date</search>\n\n",
+      "tokens": 53,
+      "action": "search"
+    },
+    {
+      "kind": "retrieval",
+      "query": "Franklin D. Roosevelt inauguration date",
+      "passage_ids": [
+        "19934673",
+        "17701140",
+        "17703270"
+      ],
+      "contents": [
+        "\"First inauguration of Franklin D. Roosevelt\"\nFirst inauguration of Franklin D. Roosevelt The first inauguration of Franklin D. Roosevelt as the 32nd President of the United States was held on Saturday, March 4, 1933. The inauguration marked the commencement of the first four-year term of Franklin D. Roosevelt as President and John Nance Garner as Vice President. It was the last inauguration to be held on the constitutionally prescribed date of March 4; the 20th Amendment, ratified in January 1933, moved Inauguration Day to January 20. As a result, Roosevelt's first term in office was shorter than a normal term (as was Garner's) by days. The",
+        "\"First inauguration of Franklin D. Roosevelt\"\nsigned the Emergency Banking Act, which provided a mechanism for reopening. He continued on for what became his First Hundred Days of the New Deal. First inauguration of Franklin D. Roosevelt The first inauguration of Franklin D. Roosevelt as the 32nd President of the United States was held on Saturday, March 4, 1933. The inauguration marked the commencement of the first four-year term of Franklin D. Roosevelt as President and John Nance Garner as Vice President. It was the last inauguration to be held on the constitutionally prescribed date of March 4; the 20th Amendment, ratified in January 1933, moved",
+        "\"Second inauguration of Franklin D. Roosevelt\"\nSecond inauguration of Franklin D. Roosevelt The second inauguration of Franklin D. Roosevelt as President of the United States was held on Wednesday, January 20, 1937. The inauguration marked the commencement of the second four-year term of Franklin D. Roosevelt as President and John Nance Garner as Vice President. It was the first inauguration to take place on January 20 as per the 20th Amendment to the U.S.Constitution. This was also the first time the Vice President took his Oath on the Inaugural Platform during the ceremonies. It rained all morning and during the inauguration - the crowds hastily dispersed"
+      ],
+      "turn": 1,
+      "inserted_tokens": 455,
+      "inserted_text": "\n<information>Doc 1(Title: \"First inauguration of Franklin D. Roosevelt\") First inauguration of Franklin D. Roosevelt The first inauguration of Franklin D. Roosevelt as the 32nd President of the United States was held on Saturday, March 4, 1933. The inauguration marked the commencement of the first four-year term of Franklin D. Roosevelt as President and John Nance Garner as Vice President. It was the last inauguration to be held on the constitutionally prescribed date of March 4; the 20th Amendment, ratified in January 1933, moved Inauguration Day to January 20. As a result, Roosevelt's first term in office was shorter than a normal term (as was Garner's) by days. The\nDoc 2(Title: \"First inauguration of Franklin D. Roosevelt\") signed the Emergency Banking Act, which provided a mechanism for reopening. He continued on for what became his First Hundred Days of the New Deal. First inauguration of Franklin D. Roosevelt The first inauguration of Franklin D. Roosevelt as the 32nd President of the United States was held on Saturday, March 4, 1933. The inauguration marked the commencement of the first four-year term of Franklin D. Roosevelt as President and John Nance Garner as Vice President. It was the last inauguration to be held on the constitutionally prescribed date of March 4; the 20th Amendment, ratified in January 1933, moved\nDoc 3(Title: \"Second inauguration of Franklin D. Roosevelt\") Second inauguration of Franklin D. Roosevelt The second inauguration of Franklin D. Roosevelt as President of the United States was held on Wednesday, January 20, 1937. The inauguration marked the commencement of the second four-year term of Franklin D. Roosevelt as President and John Nance Garner as Vice President. It was the first inauguration to take place on January 20 as per the 20th Amendment to the U.S.Constitution. This was also the first time the Vice President took his Oath on the Inaugural Platform during the ceremonies. It rained all morning and during the inauguration - the crowds hastily dispersed</information>\n"
+    },
+    {
+      "kind": "generation",
+      "turn": 2,
+      "text": "<think]From the information gathered, Franklin D. Roosevelt entered office on March 4, 1933. Now, I will provide the answer.\n</think>\n<answer>March 4, 1933</answer>\n",
+      "tokens": 51,
+      "action": "answer"
+    }
+  ],
+  "stop_reason": "answer",
+  "action_tokens": 157
+}

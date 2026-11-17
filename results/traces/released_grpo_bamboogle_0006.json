@@ -1,0 +1,63 @@
+{
+  "id": "bamboogle_0006",
+  "question": "When did the president who set the precedent of a two term limit enter office?",
+  "events": [
+    {
+      "kind": "generation",
+      "turn": 0,
+      "text": "To find out when the president who set the precedent of a two-term limit entered office, I need to first identify who this president is. I will search for information on this topic.\n\n<search>president who set the precedent of a two term limit enter office</search>\n\n",
+      "tokens": 56,
+      "action": "search"
+    },
+    {
+      "kind": "retrieval",
+      "query": "president who set the precedent of a two term limit enter office",
+      "passage_ids": [
+        "2952235",
+        "2180839",
+        "2952221"
+      ],
+      "contents": [
+        "\"Term limits in the United States\"\nRoosevelt (president, 1933–1945) in 1940 was the only president to break the tradition, winning a third term in 1940 and a fourth term in 1944. This gave rise to a successful move to formalize the traditional two-term limit by amending the U.S. Constitution. As ratified in 1951, the Twenty-Second Amendment provides that \"\"no person shall be elected to the office of President more than twice\"\". The new Amendment explicitly did not apply to the incumbent, President Harry S. Truman. However all his close advisors, pointing to his age, his failing abilities, and his poor showing in the polls, talked him",
+        "\"Twenty-second Amendment to the United States Constitution\"\nTwenty-second Amendment to the United States Constitution The Twenty-second Amendment (Amendment XXII) to the United States Constitution sets a limit on the number of times an individual is eligible for election to the office of President of the United States, and also sets additional eligibility conditions for presidents who succeed to the unexpired terms of their predecessors. Prior to the ratification of the amendment, the president had not been subject to term limits, but George Washington had established a two-term tradition that many other presidents had followed. In the 1940 presidential election, Franklin D. Roosevelt became the first president to",
+        "\"Term limits in the United States\"\ntradition was challenged by Ulysses Grant in 1880, and by Theodore Roosevelt in 1912. Otherwise no major effort to avoid it took place until 1940 when Franklin Roosevelt explicitly broke it. The 22nd Amendment to the U.S. Constitution was ratified in 1951 formally establishing in law the two-term limit—although it did not apply to the incumbent Harry Truman. The fact that \"\"perpetuity in office\"\" was not approached until the 20th century is due in part to the influence of rotation in office as a popular 19th-century concept. \"\"Ideas are, in truth, forces\"\", and rotation in office enjoyed such normative support,"
+      ],
+      "turn": 0,
+      "inserted_tokens": 472,
+      "inserted_text": "\n<information>Doc 1(Title: \"Term limits in the United States\") Roosevelt (president, 1933–1945) in 1940 was the only president to break the tradition, winning a third term in 1940 and a fourth term in 1944. This gave rise to a successful move to formalize the traditional two-term limit by amending the U.S. Constitution. As ratified in 1951, the Twenty-Second Amendment provides that \"\"no person shall be elected to the office of President more than twice\"\". The new Amendment explicitly did not apply to the incumbent, President Harry S. Truman. However all his close advisors, pointing to his age, his failing abilities, and his poor showing in the polls, talked him\nDoc 2(Title: \"Twenty-second Amendment to the United States Constitution\") Twenty-second Amendment to the United States Constitution The Twenty-second Amendment (Amendment XXII) to the United States Constitution sets a limit on the number of times an individual is eligible for election to the office of President of the United States, and also sets additional eligibility conditions for presidents who succeed to the unexpired terms of their predecessors. Prior to the ratification of the amendment, the president had not been subject to term limits, but George Washington had established a two-term tradition that many other presidents had followed. In the 1940 presidential election, Franklin D. Roosevelt became the first president to\nDoc 3(Title: \"Term limits in the United States\") tradition was challenged by Ulysses Grant in 1880, and by Theodore Roosevelt in 1912. Otherwise no major effort to avoid it took place until 1940 when Franklin Roosevelt explicitly broke it. The 22nd Amendment to the U.S. Constitution was ratified in 1951 formally establishing in law the two-term limit—although it did not apply to the incumbent Harry Truman. The fact that \"\"perpetuity in office\"\" was not approached until the 20th century is due in part to the influence of rotation in office as a popular 19th-century concept. \"\"Ideas are, in truth, forces\"\", and rotation in office enjoyed such normative support,</information>\n"
+    },
+    {
+      "kind": "generation",
+      "turn": 1,
+      "text": "Based on the information provided:\n\n<search>who was the president who set the precedent of a two term limit</search>\n\n",
+      "tokens": 25,
+      "action": "search"
+    },
+    {
+      "kind": "retrieval",
+      "query": "who was the president who set the precedent of a two term limit",
+      "passage_ids": [
+        "2952235",
+        "7157359",
+        "2952221"
+      ],
+      "contents": [
+        "\"Term limits in the United States\"\nRoosevelt (president, 1933–1945) in 1940 was the only president to break the tradition, winning a third term in 1940 and a fourth term in 1944. This gave rise to a successful move to formalize the traditional two-term limit by amending the U.S. Constitution. As ratified in 1951, the Twenty-Second Amendment provides that \"\"no person shall be elected to the office of President more than twice\"\". The new Amendment explicitly did not apply to the incumbent, President Harry S. Truman. However all his close advisors, pointing to his age, his failing abilities, and his poor showing in the polls, talked him",
+        "\"Term limits in the United States\"\nRepublican government as a periodic rotation\"\". The historian Mercy Otis Warren, warned that \"\"there is no provision for a rotation, nor anything to prevent the perpetuity of office in the same hands for life; which by a little well-timed bribery, will probably be done\"\". Michael Korzi says George Washington did not set the informal precedent for a two-term limit for the Presidency. He only meant he was too worn out to personally continue in office. It was Thomas Jefferson who made it a principle in 1808. He made many statements calling for term limits in one form or another. The",
+        "\"Term limits in the United States\"\ntradition was challenged by Ulysses Grant in 1880, and by Theodore Roosevelt in 1912. Otherwise no major effort to avoid it took place until 1940 when Franklin Roosevelt explicitly broke it. The 22nd Amendment to the U.S. Constitution was ratified in 1951 formally establishing in law the two-term limit—although it did not apply to the incumbent Harry Truman. The fact that \"\"perpetuity in office\"\" was not approached until the 20th century is due in part to the influence of rotation in office as a popular 19th-century concept. \"\"Ideas are, in truth, forces\"\", and rotation in office enjoyed such normative support,"
+      ],
+      "turn": 1,
+      "inserted_tokens": 471,
+      "inserted_text": "\n<information>Doc 1(Title: \"Term limits in the United States\") Roosevelt (president, 1933–1945) in 1940 was the only president to break the tradition, winning a third term in 1940 and a fourth term in 1944. This gave rise to a successful move to formalize the traditional two-term limit by amending the U.S. Constitution. As ratified in 1951, the Twenty-Second Amendment provides that \"\"no person shall be elected to the office of President more than twice\"\". The new Amendment explicitly did not apply to the incumbent, President Harry S. Truman. However all his close advisors, pointing to his age, his failing abilities, and his poor showing in the polls, talked him\nDoc 2(Title: \"Term limits in the United States\") Republican government as a periodic rotation\"\". The historian Mercy Otis Warren, warned that \"\"there is no provision for a rotation, nor anything to prevent the perpetuity of office in the same hands for life; which by a little well-timed bribery, will probably be done\"\". Michael Korzi says George Washington did not set the informal precedent for a two-term limit for the Presidency. He only meant he was too worn out to personally continue in office. It was Thomas Jefferson who made it a principle in 1808. He made many statements calling for term limits in one form or another. The\nDoc 3(Title: \"Term limits in the United States\") tradition was challenged by Ulysses Grant in 1880, and by Theodore Roosevelt in 1912. Otherwise no major effort to avoid it took place until 1940 when Franklin Roosevelt explicitly broke it. The 22nd Amendment to the U.S. Constitution was ratified in 1951 formally establishing in law the two-term limit—although it did not apply to the incumbent Harry Truman. The fact that \"\"perpetuity in office\"\" was not approached until the 20th century is due in part to the influence of rotation in office as a popular 19th-century concept. \"\"Ideas are, in truth, forces\"\", and rotation in office enjoyed such normative support,</information>\n"
+    },
+    {
+      "kind": "generation",
+      "turn": 2,
+      "text": "Based on these documents:\n\n<answer>Franklin D. Roosevelt</answer>\n\n",
+      "tokens": 16,
+      "action": "answer"
+    }
+  ],
+  "stop_reason": "answer",
+  "action_tokens": 97
+}

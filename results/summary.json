@@ -1,0 +1,59 @@
+{
+  "evaluations": {
+    "direct": {
+      "run": "direct-v1",
+      "em": 0.024,
+      "correct": 3,
+      "n": 125,
+      "paper_em": 0.024,
+      "invalid_or_empty_answers": 0,
+      "stop_reasons": {
+        "direct": 125
+      },
+      "mean_searches": 0.0,
+      "seconds_per_question": 0.27
+    },
+    "released_grpo": {
+      "run": "released-grpo-v02b",
+      "em": 0.272,
+      "correct": 34,
+      "n": 125,
+      "paper_em": 0.232,
+      "invalid_or_empty_answers": 2,
+      "stop_reasons": {
+        "answer": 123,
+        "max_turns": 2
+      },
+      "mean_searches": 2.23,
+      "seconds_per_question": 2.02
+    },
+    "released_ppo": {
+      "run": "released-ppo-v02b",
+      "em": 0.336,
+      "correct": 42,
+      "n": 125,
+      "paper_em": 0.264,
+      "invalid_or_empty_answers": 8,
+      "stop_reasons": {
+        "answer": 117,
+        "max_turns": 8
+      },
+      "mean_searches": 2.19,
+      "seconds_per_question": 2.53
+    },
+    "own_grpo": {
+      "status": "missing"
+    },
+    "own_ppo": {
+      "status": "missing"
+    }
+  },
+  "training": {
+    "grpo": {
+      "status": "missing"
+    },
+    "ppo": {
+      "status": "missing"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "id": "bamboogle_0001",
+  "question": "Who was president of the United States in the year that Citibank was founded?",
+  "events": [
+    {
+      "kind": "generation",
+      "turn": 0,
+      "text": "<think]To answer this question, I need to first determine the year Citibank was founded. Let's start by searching for that information.\n<search>When was Citibank founded?</search>\n",
+      "tokens": 42,
+      "action": "search"
+    },
+    {
+      "kind": "retrieval",
+      "query": "When was Citibank founded?",
+      "passage_ids": [
+        "12360383",
+        "19282393",
+        "16961209"
+      ],
+      "contents": [
+        "Citigroup\nwas formed on October 8, 1998, following the $140 billion merger of Citicorp and Travelers Group to create the world's largest financial services organization. The history of the company is, thus, divided into the workings of several firms that over time amalgamated into Citicorp, a multinational banking corporation operating in more than 100 countries; or Travelers Group, whose businesses covered credit services, consumer finance, brokerage, and insurance. As such, the company history dates back to the founding of: the City Bank of New York (later Citibank) in 1812; Bank Handlowy in 1870; Smith Barney in 1873, Banamex in 1884; Salomon",
+        "Citibank\nresulting in a net profit for the U.S. federal government. The City Bank of New York was founded on June 16, 1812. The first president of the City Bank was the statesman and retired Colonel, Samuel Osgood. In August 1813, with Osgood's death, William Few became President of the Bank, staying until 1817, followed by Peter Stagg (1817–1825), Thomas Smith (1825–1827), Isaac Wright (1827–1832), and Thomas Bloodgood (1832–1843). Ownership and management of the bank was taken over by Moses Taylor in 1837, a protégé of John Jacob Astor and one of the giants of the business world in the 19th",
+        "Citibank\nCitibank Citibank is the consumer division of financial services multinational Citigroup. Citibank was founded in 1812 as the \"\"City Bank of New York\"\", and later became \"\"First National City Bank of New York\"\". Citibank provides credit cards, mortgages, personal loans, commercial loans, and lines of credit. The bank has 2,649 branches in 19 countries, including 723 branches in the United States and 1,494 branches in Mexico. The U.S. branches are concentrated in six metropolitan areas: New York City, Chicago, Los Angeles, San Francisco, Washington, D.C., and Miami. In 2016, the United States accounted for 70% of revenue and Mexico accounted"
+      ],
+      "turn": 0,
+      "inserted_tokens": 544,
+      "inserted_text": "\n<information>Doc 1(Title: Citigroup) was formed on October 8, 1998, following the $140 billion merger of Citicorp and Travelers Group to create the world's largest financial services organization. The history of the company is, thus, divided into the workings of several firms that over time amalgamated into Citicorp, a multinational banking corporation operating in more than 100 countries; or Travelers Group, whose businesses covered credit services, consumer finance, brokerage, and insurance. As such, the company history dates back to the founding of: the City Bank of New York (later Citibank) in 1812; Bank Handlowy in 1870; Smith Barney in 1873, Banamex in 1884; Salomon\nDoc 2(Title: Citibank) resulting in a net profit for the U.S. federal government. The City Bank of New York was founded on June 16, 1812. The first president of the City Bank was the statesman and retired Colonel, Samuel Osgood. In August 1813, with Osgood's death, William Few became President of the Bank, staying until 1817, followed by Peter Stagg (1817–1825), Thomas Smith (1825–1827), Isaac Wright (1827–1832), and Thomas Bloodgood (1832–1843). Ownership and management of the bank was taken over by Moses Taylor in 1837, a protégé of John Jacob Astor and one of the giants of the business world in the 19th\nDoc 3(Title: Citibank) Citibank Citibank is the consumer division of financial services multinational Citigroup. Citibank was founded in 1812 as the \"\"City Bank of New York\"\", and later became \"\"First National City Bank of New York\"\". Citibank provides credit cards, mortgages, personal loans, commercial loans, and lines of credit. The bank has 2,649 branches in 19 countries, including 723 branches in the United States and 1,494 branches in Mexico. The U.S. branches are concentrated in six metropolitan areas: New York City, Chicago, Los Angeles, San Francisco, Washington, D.C., and Miami. In 2016, the United States accounted for 70% of revenue and Mexico accounted</information>\n"
+    },
+    {
+      "kind": "generation",
+      "turn": 1,
+      "text": "<think]From the information provided, Citibank was founded in 1812. Now, we need to find out who was the president of the United States in 1812.\n<search>Who was president of the United States in 1812?</search>\n\n",
+      "tokens": 61,
+      "action": "search"
+    },
+    {
+      "kind": "retrieval",
+      "query": "Who was president of the United States in 1812?",
+      "passage_ids": [
+        "2498398",
+        "10685575",
+        "10491375"
+      ],
+      "contents": [
+        "\"1812 United States elections\"\n1812 United States elections The 1812 United States elections elected the members of the 13th United States Congress. The election took place during the First Party System, and shortly after the start of the War of 1812. The Federalist Party made a relatively strong showing, winning seats in both chambers while supporting a competitive challenge to the incumbent Democratic-Republican President. However, the Democratic-Republican Party continued its control of the Presidency and both houses of Congress. In the Presidential election, incumbent Democratic-Republican President James Madison defeated New York Lieutenant Governor and New York City Mayor DeWitt Clinton. Clinton was a member",
+        "\"1812 United States presidential election\"\n1812 United States presidential election The United States presidential election of 1812, the seventh quadrennial American presidential election, was held from Friday, October 30, 1812 to Wednesday, December 2, 1812. Taking place in the shadow of the War of 1812, incumbent Democratic-Republican President James Madison defeated DeWitt Clinton, who drew support from dissident Democratic-Republicans in the North as well as Federalists. It was the first presidential election to be held during a major war involving the United States. Northern Democratic-Republicans had long been dissatisfied by the Southern dominance of their party, and DeWitt Clinton's uncle, Vice President George Clinton, had",
+        "\"1812 United States presidential election in New York\"\nYork and Pennsylvania, and while Clinton was able to take his home state, he failed to take Pennsylvania and thus lost the election to traditional Democratic Republican candidate and incumbent President James Madison won by a narrow margin. 1812 United States presidential election in New York The 1812 United States presidential election in New York took place between October 30 and December 2, 1812, as part of the 1812 United States presidential election. The state legislature chose 29 representatives, or electors to the Electoral College, who voted for President and Vice President. During this election, New York cast its nine"
+      ],
+      "turn": 1,
+      "inserted_tokens": 478,
+      "inserted_text": "\n<information>Doc 1(Title: \"1812 United States elections\") 1812 United States elections The 1812 United States elections elected the members of the 13th United States Congress. The election took place during the First Party System, and shortly after the start of the War of 1812. The Federalist Party made a relatively strong showing, winning seats in both chambers while supporting a competitive challenge to the incumbent Democratic-Republican President. However, the Democratic-Republican Party continued its control of the Presidency and both houses of Congress. In the Presidential election, incumbent Democratic-Republican President James Madison defeated New York Lieutenant Governor and New York City Mayor DeWitt Clinton. Clinton was a member\nDoc 2(Title: \"1812 United States presidential election\") 1812 United States presidential election The United States presidential election of 1812, the seventh quadrennial American presidential election, was held from Friday, October 30, 1812 to Wednesday, December 2, 1812. Taking place in the shadow of the War of 1812, incumbent Democratic-Republican President James Madison defeated DeWitt Clinton, who drew support from dissident Democratic-Republicans in the North as well as Federalists. It was the first presidential election to be held during a major war involving the United States. Northern Democratic-Republicans had long been dissatisfied by the Southern dominance of their party, and DeWitt Clinton's uncle, Vice President George Clinton, had\nDoc 3(Title: \"1812 United States presidential election in New York\") York and Pennsylvania, and while Clinton was able to take his home state, he failed to take Pennsylvania and thus lost the election to traditional Democratic Republican candidate and incumbent President James Madison won by a narrow margin. 1812 United States presidential election in New York The 1812 United States presidential election in New York took place between October 30 and December 2, 1812, as part of the 1812 United States presidential election. The state legislature chose 29 representatives, or electors to the Electoral College, who voted for President and Vice President. During this election, New York cast its nine</information>\n"
+    },
+    {
+      "kind": "generation",
+      "turn": 2,
+      "text": "<think]From the information provided, in 1812, James Madison was the President of the United States. Therefore, the answer to the question is James Madison.\n</think>\n<answer>James Madison</answer>",
+      "tokens": 47,
+      "action": "answer"
+    }
+  ],
+  "stop_reason": "answer",
+  "action_tokens": 150
+}
