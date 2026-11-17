@@ -42,13 +42,16 @@ def main():
     if min(a.train_size,a.val_size)<1: p.error('Both split sizes must be positive')
     for name in ('train.jsonl','validation.jsonl','sources.lock.json','training_manifest.json'):
         if (a.output_dir/name).exists(): p.error('Prepared training data already exists; use a fresh output folder')
-    from datasets import load_dataset
-    from huggingface_hub import HfApi
+    import pyarrow.parquet as pq
+    from huggingface_hub import HfApi,hf_hub_download
     api=HfApi()
     sources={'dataset':{'id':DATASET,'revision':api.dataset_info(DATASET).sha},'models':{}}
     for name,model_id in MODELS.items():
         sources['models'][name]={'id':model_id,'revision':api.model_info(model_id).sha}
-    ds=load_dataset(DATASET,revision=sources['dataset']['revision'],split='train')
+    # Read only train.parquet and the columns used. datasets.load_dataset also builds the test split,
+    # whose nested 'metadata' column has a different schema and fails the cast.
+    path=hf_hub_download(DATASET,'train.parquet',repo_type='dataset',revision=sources['dataset']['revision'])
+    ds=pq.read_table(path,columns=['id','question','golden_answers','data_source']).to_pylist()
     train,val=split_records(ds,read_jsonl(a.heldout_questions),a.train_size,a.val_size,a.seed)
     a.output_dir.mkdir(parents=True,exist_ok=True)
     write_jsonl(a.output_dir/'train.jsonl',train); write_jsonl(a.output_dir/'validation.jsonl',val)

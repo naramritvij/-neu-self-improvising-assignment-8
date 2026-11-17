@@ -59,3 +59,18 @@ class TestAlgorithms(unittest.TestCase):
         ref=p.logprobs(tr,reference=True).clone()
         with torch.no_grad(): p.b.add_(1)
         self.assertTrue(torch.equal(ref,p.logprobs(tr,reference=True)))
+
+
+class TestMinibatches(unittest.TestCase):
+    def test_two_minibatches_take_two_steps_and_activate_the_ratio(self):
+        p=TinyAdapterPolicy(ppo=True)
+        trs=[Trajectory([10,11+i,12,13+i],[0,1,0,1],'s') for i in range(4)]
+        cfg=Config(algorithm='ppo',minibatches=2,learning_rate=.05,critic_learning_rate=.05)
+        batch=prepare_batch(p,trs,[0.,1.,0.,1.],cfg)
+        logs=update_batch(p,batch,cfg,torch.optim.Adam(p.actor_parameters(),lr=.05),torch.optim.Adam(p.critic_parameters(),lr=.05))
+        self.assertEqual(logs['optimizer_steps'],2)
+        # After the first step the policy moved, so new/old log-probs differ on the next minibatch.
+        self.assertFalse(all(torch.allclose(p.logprobs(b.trajectory),b.old_logprobs) for b in batch))
+    def test_gae_lambda_one_is_return_to_go_minus_value(self):
+        a,r=gae(torch.tensor([0.,0.,1.]),torch.tensor([.1,.2,.3]),gamma=1.,lam=1.)
+        self.assertTrue(torch.allclose(r,torch.ones(3))); self.assertTrue(torch.allclose(a,torch.tensor([.9,.8,.7])))

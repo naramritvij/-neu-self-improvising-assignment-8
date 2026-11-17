@@ -24,6 +24,7 @@ def main():
     p.add_argument('--retrieval-url'); p.add_argument('--corpus-id'); p.add_argument('--retriever-id')
     p.add_argument('--limit',type=int,help='Diagnostic only; never reported as the full benchmark')
     p.add_argument('--resume',action='store_true')
+    p.add_argument('--device',choices=['cuda','cpu'],default='cuda',help='cpu is for dry runs with a small model')
     a=p.parse_args()
     if a.limit is not None and a.limit<1: p.error('Diagnostic limit must be positive')
     own=a.method.startswith('own_'); search=a.method!='direct'
@@ -63,7 +64,7 @@ def main():
         done={x['id'] for x in previous}
         if not done.issubset({x['id'] for x in selected}): p.error('Existing predictions contain unexpected IDs')
     seed_all(cfg.seed)
-    policy=HFPolicy(cfg,adapter_path=str(a.checkpoint/'actor') if own else None,training=False)
+    policy=HFPolicy(cfg,adapter_path=str(a.checkpoint/'actor') if own else None,training=False,device=a.device)
     a.output.mkdir(parents=True,exist_ok=True)
     manifest={'status':'running','signature':signature,'environment':environment(),
         'total_questions':len(questions),'selected_questions':len(selected),

@@ -124,6 +124,39 @@ class HFPolicy:
               stopping_criteria=StoppingCriteriaList([Tags()]),use_cache=True)
         return result[0,start:].tolist()
 
+    @torch.no_grad()
+    def generate_batch(self,batch_ids,*,max_new_tokens,sample,stop_on_search):
+        """Generate one turn for many contexts at once (left padding), then trim each sequence.
+
+        Qwen's pad token (<|endoftext|>) is also an EOS id, so trailing pads after a stop-string
+        finish are indistinguishable from a generated EOS. Each sequence is therefore cut at
+        min(first EOS + 1, shortest prefix whose text contains a stop tag)."""
+        if not batch_ids: return []
+        self._activate('actor'); self.lm.eval()
+        stops=['</answer>']+(['</search>'] if stop_on_search else [])
+        pad=self.tokenizer.pad_token_id; width=max(len(x) for x in batch_ids)
+        inp=torch.full((len(batch_ids),width),pad,dtype=torch.long)
+        mask=torch.zeros((len(batch_ids),width),dtype=torch.long)
+        for i,ids in enumerate(batch_ids):
+            inp[i,width-len(ids):]=torch.tensor(ids); mask[i,width-len(ids):]=1
+        extra={'temperature':1.,'top_p':1.,'top_k':0} if sample else {}
+        out=self.lm.generate(input_ids=inp.to(self.device),attention_mask=mask.to(self.device),
+              max_new_tokens=max_new_tokens,do_sample=sample,**extra,
+              repetition_penalty=1.,no_repeat_ngram_size=0,stop_strings=stops,tokenizer=self.tokenizer,
+              eos_token_id=sorted(self.eos_ids),pad_token_id=pad,use_cache=True)
+        return [self._trim(seq,stops) for seq in out[:,width:].tolist()]
+
+    def _trim(self,seq,stops):
+        end=next((i+1 for i,t in enumerate(seq) if t in self.eos_ids),len(seq))
+        decode=lambda n: self.tokenizer.decode(seq[:n],skip_special_tokens=True)
+        if not any(s in decode(end) for s in stops): return seq[:end]
+        lo,hi=1,end   # smallest prefix containing a stop tag (containment is monotonic in length)
+        while lo<hi:
+            mid=(lo+hi)//2
+            if any(s in decode(mid) for s in stops): hi=mid
+            else: lo=mid+1
+        return seq[:lo]
+
     def save(self,path):
         path=Path(path); path.mkdir(parents=True,exist_ok=True)
         self._activate('actor')

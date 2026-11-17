@@ -80,38 +80,50 @@ def prepare_batch(policy,trajectories,rewards,cfg):
     return batch
 
 
+def minibatch_split(batch,minibatches):
+    """Shuffle once per epoch and split into `minibatches` chunks, like verl's ppo_mini_batch_size
+    (the paper splits each 512 batch into 256-sample minibatches, App. B.2). Every optimizer step
+    after the first is slightly off-policy, so the clipped ratio is active."""
+    order=torch.randperm(len(batch)).tolist()
+    n=min(minibatches,len(batch))
+    return [[batch[i] for i in order[k::n]] for k in range(n)]
+
+
 def update_batch(policy,batch,cfg,actor_optimizer,critic_optimizer=None,*,actor_update=True):
     if not batch: raise ValueError('Empty rollout batch')
-    logs={'policy_loss':0.,'reference_kl':0.,'value_loss':0.,'clip_fraction':0.}
+    logs={'policy_loss':0.,'reference_kl':0.,'value_loss':0.,'clip_fraction':0.,'optimizer_steps':0}
     actor_params=list(policy.actor_parameters())
     critic_params=list(policy.critic_parameters()) if cfg.algorithm=='ppo' else []
+    if cfg.algorithm=='ppo' and critic_optimizer is None: raise ValueError('PPO requires an optimizer for the critic')
+    weight=1./(len(batch)*cfg.update_epochs)
     for _ in range(cfg.update_epochs):
-        if actor_update:
-            actor_optimizer.zero_grad(set_to_none=True)
-            for item in batch:
-                new=policy.logprobs(item.trajectory)
-                old=item.old_logprobs.to(new.device); adv=item.advantages.to(new.device)
-                pg=clipped_policy_loss(new,old,adv,cfg.clip)
-                kl=reference_kl(new,item.ref_logprobs.to(new.device))
-                loss=pg+(cfg.kl_beta*kl if cfg.algorithm=='grpo' else 0.)
-                if not torch.isfinite(loss): raise FloatingPointError('Non-finite actor loss; stop and inspect this run')
-                (loss/len(batch)).backward()
-                logs['policy_loss']+=float(pg.detach())/(len(batch)*cfg.update_epochs)
-                logs['reference_kl']+=float(kl.detach())/(len(batch)*cfg.update_epochs)
-                logs['clip_fraction']+=float(((new-old).exp().sub(1).abs()>cfg.clip).float().mean().detach())/(len(batch)*cfg.update_epochs)
-            torch.nn.utils.clip_grad_norm_(actor_params,cfg.max_grad_norm,error_if_nonfinite=True)
-            actor_optimizer.step()
-            actor_optimizer.zero_grad(set_to_none=True)
-        if cfg.algorithm=='ppo':
-            if critic_optimizer is None: raise ValueError('PPO requires an optimizer for the critic')
-            critic_optimizer.zero_grad(set_to_none=True)
-            for item in batch:
-                values=policy.values(item.trajectory)
-                loss=clipped_value_loss(values,item.old_values.to(values.device),item.returns.to(values.device),cfg.value_clip)
-                if not torch.isfinite(loss): raise FloatingPointError('Non-finite value loss')
-                (loss/len(batch)).backward()
-                logs['value_loss']+=float(loss.detach())/(len(batch)*cfg.update_epochs)
-            torch.nn.utils.clip_grad_norm_(critic_params,cfg.max_grad_norm,error_if_nonfinite=True)
-            critic_optimizer.step()
-            critic_optimizer.zero_grad(set_to_none=True)
+        for chunk in minibatch_split(batch,cfg.minibatches):
+            if actor_update:
+                actor_optimizer.zero_grad(set_to_none=True)
+                for item in chunk:
+                    new=policy.logprobs(item.trajectory)
+                    old=item.old_logprobs.to(new.device); adv=item.advantages.to(new.device)
+                    pg=clipped_policy_loss(new,old,adv,cfg.clip)
+                    kl=reference_kl(new,item.ref_logprobs.to(new.device))
+                    loss=pg+(cfg.kl_beta*kl if cfg.algorithm=='grpo' else 0.)
+                    if not torch.isfinite(loss): raise FloatingPointError('Non-finite actor loss; stop and inspect this run')
+                    (loss/len(chunk)).backward()
+                    logs['policy_loss']+=float(pg.detach())*weight
+                    logs['reference_kl']+=float(kl.detach())*weight
+                    logs['clip_fraction']+=float(((new-old).exp().sub(1).abs()>cfg.clip).float().mean().detach())*weight
+                torch.nn.utils.clip_grad_norm_(actor_params,cfg.max_grad_norm,error_if_nonfinite=True)
+                actor_optimizer.step()
+                actor_optimizer.zero_grad(set_to_none=True)
+                logs['optimizer_steps']+=1
+            if cfg.algorithm=='ppo':
+                critic_optimizer.zero_grad(set_to_none=True)
+                for item in chunk:
+                    values=policy.values(item.trajectory)
+                    loss=clipped_value_loss(values,item.old_values.to(values.device),item.returns.to(values.device),cfg.value_clip)
+                    if not torch.isfinite(loss): raise FloatingPointError('Non-finite value loss')
+                    (loss/len(chunk)).backward()
+                    logs['value_loss']+=float(loss.detach())*weight
+                torch.nn.utils.clip_grad_norm_(critic_params,cfg.max_grad_norm,error_if_nonfinite=True)
+                critic_optimizer.step()
+                critic_optimizer.zero_grad(set_to_none=True)
     return logs

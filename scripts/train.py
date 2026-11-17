@@ -47,7 +47,7 @@ def train(args):
         old=json.loads((out/'manifest.json').read_text())
         if old['provenance']!=provenance: raise ValueError('Resume data, retrieval or model revision changed')
     out.mkdir(parents=True,exist_ok=True)
-    policy=HFPolicy(cfg)
+    policy=HFPolicy(cfg,device=args.device)
     actor_params=policy.actor_parameters()
     if not actor_params: raise ValueError('No LoRA actor parameters found; refusing full-model training')
     actor=torch.optim.AdamW(actor_params,lr=cfg.learning_rate)
@@ -118,6 +118,7 @@ def main():
     p.add_argument('--output',type=Path,required=True); p.add_argument('--resume',type=Path)
     p.add_argument('--steps',type=int); p.add_argument('--retrieval-url',required=True)
     p.add_argument('--corpus-id',required=True); p.add_argument('--retriever-id',required=True)
+    p.add_argument('--device',choices=['cuda','cpu'],default='cuda',help='cpu is for dry runs with a small model')
     a=p.parse_args(); train(a)
 
 if __name__=='__main__': main()
