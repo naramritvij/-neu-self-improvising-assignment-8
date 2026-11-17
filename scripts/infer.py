@@ -12,7 +12,7 @@ from search_r1_team.retrieval import HTTPRetriever
 from search_r1_team.rollout import run_episodes
 from search_r1_team.runtime import environment,seed_all,sha256,write_json
 
-METHODS=['direct','own_grpo','own_ppo','released_grpo','released_ppo']
+METHODS=['direct','base_search','own_grpo','own_ppo','released_grpo','released_ppo']
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
@@ -34,10 +34,11 @@ def main():
     if search and not all((a.retrieval_url,a.corpus_id,a.retriever_id)): p.error('Search inference needs retrieval URL and provenance')
     if a.output.exists() and not a.resume: p.error('Output exists; use a new folder or --resume')
     cfg=Config.load(a.config)
-    source_key='direct' if own else a.method
+    # base_search: the untrained instruct model with the Search-R1 prompt and retriever.
+    source_key='direct' if own or a.method=='base_search' else a.method
     lock=json.loads((a.data_dir/'sources.lock.json').read_text())['models'][source_key]
     cfg.model_id,cfg.model_revision=lock['id'],lock['revision']
-    if search: cfg.algorithm=a.method.split('_')[-1]
+    if search: cfg.algorithm=a.method.split('_')[-1] if a.method!='base_search' else 'grpo'
     training_metadata=None
     if own:
         metadata=json.loads((a.checkpoint/'model_metadata.json').read_text())
@@ -70,7 +71,7 @@ def main():
     manifest={'status':'running','signature':signature,'environment':environment(),
         'total_questions':len(questions),'selected_questions':len(selected),
         'coverage':'full' if len(selected)==len(questions) else 'partial_diagnostic',
-        'checkpoint_origin':'own_lora_training' if own else ('released_full_checkpoint' if search else 'base_instruct'),
+        'checkpoint_origin':'own_lora_training' if own else ('base_instruct_with_search' if a.method=='base_search' else 'released_full_checkpoint' if search else 'base_instruct'),
         'prompt_parity':'documented_compact_prompt_not_exact_flashrag_baseline'}
     write_json(a.output/'manifest.json',manifest)
     try:

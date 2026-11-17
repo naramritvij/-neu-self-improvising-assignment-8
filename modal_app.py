@@ -98,7 +98,7 @@ def gpu_run(job: str,algorithm: str,profile: str,run_name: str,method: str,
                 cmd+=['--resume',checkpoint]
             call(cmd)
         elif job=='evaluate':
-            if method not in ('direct','own_grpo','own_ppo','released_grpo','released_ppo'): raise ValueError('Invalid evaluation method')
+            if method not in ('direct','base_search','own_grpo','own_ppo','released_grpo','released_ppo'): raise ValueError('Invalid evaluation method')
             cmd=['scripts/infer.py','--method',method,'--data-dir','/vol/data','--output',str(out)]
             if method!='direct':
                 if not all((retrieval_url,corpus_id,retriever_id)): raise ValueError('Search inference requires retrieval')
@@ -109,7 +109,7 @@ def gpu_run(job: str,algorithm: str,profile: str,run_name: str,method: str,
             call(cmd)
             # The complete benchmark scorer rejects partial diagnostics by default.
             score=['scripts/evaluate.py','--gold','/vol/data/bamboogle_labels.jsonl',
-                  '--predictions',str(out/'predictions.jsonl'),'--method',method.split('_')[-1],
+                  '--predictions',str(out/'predictions.jsonl'),'--method','direct' if method=='direct' else ('ppo' if method.endswith('ppo') else 'grpo'),
                   '--output',str(out/'metrics.json')]
             if limit: score+=['--allow-partial']
             if resume and (out/'metrics.json').exists(): score+=['--overwrite']

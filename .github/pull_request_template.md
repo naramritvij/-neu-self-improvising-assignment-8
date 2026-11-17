@@ -1,6 +1,6 @@
 ## What changed
 
-Describe the change and the task owner.
+Describe the change.
 
 ## Evidence
 
@@ -10,6 +10,6 @@ Describe the change and the task owner.
 - [ ] Results are measured, not copied from paper references or synthetic fixtures.
 - [ ] The other team member reviewed the change.
 
-## Actual contribution
+## Project log
 
-Update docs/CONTRIBUTIONS.md after completing the work. Do not attribute AI-assisted initialization to independent human authorship.
+Add a milestone to docs/CONTRIBUTIONS.md when the change completes one.

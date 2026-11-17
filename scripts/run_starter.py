@@ -13,18 +13,22 @@ ROOT=Path(__file__).resolve().parents[1]
 PIN='3659acfad61dab2f90fa46294566ff6808452e87'
 
 class Overrides(ast.NodeTransformer):
-    def __init__(self,output,steps,smoke): self.output,self.steps,self.smoke=output,steps,smoke
+    def __init__(self,output,steps,smoke,reduced=False): self.output,self.steps,self.smoke,self.reduced=output,steps,smoke,reduced
     def visit_Assign(self,node):
         self.generic_visit(node)
         names=[x.id for x in node.targets if isinstance(x,ast.Name)]
         if 'output_dir' in names: node.value=ast.Constant(self.output)
         if self.smoke and 'max_completion_length' in names: node.value=ast.Constant(128)
+        # Memory-reduced replication for an 80 GB GPU (the starter targets a B300).
+        if self.reduced and 'max_completion_length' in names: node.value=ast.Constant(512)
         if self.smoke and 'eval_steps' in names: node.value=ast.Constant(2)
         return node
     def visit_Call(self,node):
         self.generic_visit(node)
         if isinstance(node.func,ast.Name) and node.func.id=='GRPOConfig':
             changes={'max_steps':self.steps}
+            if self.reduced:
+                changes.update(per_device_train_batch_size=8,num_generations=8)
             if self.smoke:
                 changes.update(eval_strategy='no',eval_on_start=False,num_generations=2,
                     per_device_train_batch_size=2,gradient_accumulation_steps=1,use_vllm=False)
@@ -35,7 +39,8 @@ class Overrides(ast.NodeTransformer):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--output',type=Path,required=True); p.add_argument('--steps',type=int,default=2000)
-    p.add_argument('--smoke',action='store_true'); a=p.parse_args()
+    p.add_argument('--smoke',action='store_true')
+    p.add_argument('--reduced',action='store_true',help='batch 8, 8 generations, 512-token completions (fits 80 GB)'); a=p.parse_args()
     source=ROOT/'vendor/tiny-zero-lora'
     if not (source/'train.py').exists(): p.error('Run scripts/fetch_starter.py first')
     commit=subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip()
@@ -55,8 +60,10 @@ def main():
     steps=2 if a.smoke else a.steps
     (a.output/'starter_manifest.json').write_text(json.dumps({
         'upstream_commit':commit,'steps':steps,'smoke_only':a.smoke,'dependencies':actual,
-        'changes':'output path plus declared step budget; smoke also reduces generation/batch and disables vLLM/eval'},indent=2))
-    tree=Overrides(str(a.output/'model'),steps,a.smoke).visit(ast.parse((source/'train.py').read_text()))
+        'reduced_memory':a.reduced,
+        'changes':'output path plus declared step budget; smoke also reduces generation/batch and disables vLLM/eval; '
+                  'reduced sets per_device_train_batch_size=8, num_generations=8, max_completion_length=512'},indent=2))
+    tree=Overrides(str(a.output/'model'),steps,a.smoke,a.reduced).visit(ast.parse((source/'train.py').read_text()))
     ast.fix_missing_locations(tree)
     sys.path.insert(0,str(source))
     scope={'__name__':'class_starter','__file__':str(source/'train.py')}

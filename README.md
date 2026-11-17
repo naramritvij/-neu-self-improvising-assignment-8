@@ -1,16 +1,12 @@
 # Search-R1 with LoRA on Bamboogle — INFO 7375 Assignment 8
 
-**Course:** INFO 7375, Self-Improving AI · Week 08 · **Author:** Ghouse (completed individually;
-Ritvij initialized this repository, and his code is the base this work builds on)
+**Course:** INFO 7375, Self-Improving AI · Week 08 · **Authors:** Ritvij Naram and Ghouse
 
 The assignment: understand and replicate the class starter
 [`suhabe/tiny-zero-lora`](https://github.com/suhabe/tiny-zero-lora), then replicate the
 Qwen2.5-3B-Instruct rows of Search-R1 ([Jin et al., arXiv:2503.09516v5](https://arxiv.org/abs/2503.09516))
 on Bamboogle: Direct Inference, and Search-R1-instruct trained with both PPO and GRPO, using
 LoRA (PEFT) instead of full fine-tuning.
-
-> **Status: interim.** The Direct Inference and released-checkpoint rows are final. The LoRA
-> GRPO and PPO runs were still training when this was pushed; their rows will be filled in.
 
 ## Results (Bamboogle, 125 questions, exact match)
 
@@ -19,16 +15,38 @@ LoRA (PEFT) instead of full fine-tuning.
 | Direct Inference | Qwen2.5-3B-Instruct, no retrieval | **0.024** (3/125) | 0.024 | Table 2 |
 | Search-R1-instruct, GRPO (released v0.2 checkpoint) | `PeterJinGo/SearchR1-nq_hotpotqa_train-qwen2.5-3b-it-em-grpo-v0.2` | **0.272** (34/125) | 0.232 | Table 3 |
 | Search-R1-instruct, PPO (released v0.2 checkpoint) | `PeterJinGo/SearchR1-nq_hotpotqa_train-qwen2.5-3b-it-em-ppo-v0.2` | **0.336** (42/125) | 0.264 | Table 2 |
-| Search-R1-instruct, GRPO (our LoRA run) | Qwen2.5-3B-Instruct + rank-16 LoRA | in progress | 0.232 | Table 3 |
-| Search-R1-instruct, PPO (our LoRA run) | Qwen2.5-3B-Instruct + rank-16 LoRA actor and critic | in progress | 0.264 | Table 2 |
+| Search prompt + E5, untrained (our baseline for the LoRA runs) | Qwen2.5-3B-Instruct, no RL | 0.120 (15/125) | — | — |
+| Search-R1-instruct, GRPO (our LoRA run, 40 steps) | Qwen2.5-3B-Instruct + rank-16 LoRA | **0.240** (30/125) | 0.232 | Table 3 |
+| Search-R1-instruct, PPO (our LoRA run, 39 steps) | Qwen2.5-3B-Instruct + rank-16 LoRA actor and critic | **0.192** (24/125) | 0.264 | Table 2 |
 
 All rows use the same 125 FlashRAG Bamboogle questions, normalized exact match (lowercase, strip
 punctuation and articles, collapse whitespace, any accepted alias), greedy decoding, and for the
 search rows the same E5 retriever over Wikipedia-2018 with top-3 passages, up to 4 searches and
 then one final turn without search.
 
+**Evaluation details.**
+- **Scoring:** every "Ours" number is computed by `scripts/evaluate.py` from the run's saved
+  `predictions.jsonl` against the FlashRAG gold labels. The SHA-256 of the predictions file is
+  recorded in `metrics.json`. `results/paper_reference.json` only supplies the "Paper" column.
+- **Decoding is greedy everywhere** (`do_sample=False`, so Qwen's default temperature, top-p and
+  top-k are inactive), on Qwen2.5-3B-Instruct revision `aa8e725`.
+- **Direct Inference:** system and user message through the chat template, at most **32 new
+  tokens**, stopping at end-of-sequence. The whole output is the answer.
+- **Search rows:** up to **500 new tokens per turn**, each turn stopped at its first `</search>`
+  or `</answer>`; up to **4 search turns plus one final turn**, within a 4,096-token context.
+  The answer is the last `<answer>` tag in the model's response.
+
 - **Direct Inference matches the paper exactly (0.024).** It uses FlashRAG's no-retrieval
   prompt with greedy decoding and a 32-token answer.
+- **Our LoRA runs: GRPO reaches the paper's GRPO number (0.240 vs 0.232); PPO does not (0.192 vs
+  0.264).** Both adapters were trained for only ~40 steps (about 1,600 rollouts, under 1% of the
+  paper's rollouts) with LoRA instead of full fine-tuning, so they should be read against the
+  untrained search baseline (0.120): **short GRPO training doubles it (+15 questions) and PPO adds
+  +9 questions.** The untrained model also leaves 20 questions unanswered within the turn budget,
+  against 1 for GRPO and 0 for PPO, so much of the gain is learning to finish with an `<answer>` tag. PPO learns more
+  slowly early in training because its critic starts from zero (the paper makes the same
+  observation: GRPO converges faster, PPO is slower but more stable, Fig. 2a), and 39 steps is
+  well inside that early phase. With one seed and 125 questions, ±1 question is ±0.008 EM.
 - **The released checkpoints score above the paper** (GRPO +0.040, PPO +0.072); the paper's
   ordering, PPO above GRPO, holds. One question is worth 0.008 here, so these gaps are 5 and 9
   questions. Possible reasons: the paper evaluates through veRL's batched vLLM pipeline, while we
@@ -42,11 +60,14 @@ then one final turn without search.
 | Stage | Where | Result |
 |---|---|---|
 | Starter walkthrough (`walkthrough.py`, tokenizer + rewards) | Local CPU | Prompts and all 7 reward scenarios behave as documented |
-| Starter's own `train.py`, 20-step run | Modal A100-80GB | Step-0 held-out eval ran (solve rate 5.5%, format 32.0%); the first training step ran out of GPU memory. See [the starter section](#tiny-zero-lora-replication). |
+| Starter's own `train.py`, 20 steps, memory-reduced | Modal A100-80GB | Trained; held-out format 33.0% → 76.5%, solve rate 5.5% → 4.0%. See [the starter section](#tiny-zero-lora-replication). |
 | E5 index, corpus and encoder download (64.6 GB + 14.4 GB) | Modal CPU | Done; corpus repaired (see below) |
 | Direct Inference, 125 questions | Modal L4 | EM 0.024 |
 | Released v0.2 GRPO and PPO, 125 questions with search | Modal L40S + co-located E5 | EM 0.272 and 0.336 |
-| Our LoRA GRPO and PPO training | Modal L40S + co-located E5 | In progress |
+| Our LoRA GRPO training, 40 steps × 40 rollouts | Modal L40S + co-located E5 | 1,600 rollouts in 103 min; training reward 0.225 → 0.300 (first/last 5 steps) |
+| Our LoRA PPO training, 39 steps × 40 rollouts | Modal L40S + co-located E5 | 1,560 rollouts in 102 min; training reward 0.185 → 0.330 |
+| Our GRPO and PPO adapters, 125 questions with search | Modal L40S + co-located E5 | EM 0.240 and 0.192 |
+| Untrained instruct model with the same search prompt | Modal L40S + co-located E5 | EM 0.120 (20 questions unanswered within the turn budget) |
 
 ## Method
 
@@ -83,6 +104,12 @@ was repaired and re-verified (21,015,324 rows).
 - **Both:** two minibatch optimizer steps per batch (so clipping is active), AdamW at lr 2e-5
   (actor) and 1e-4 (critic), sampling at temperature 1 and top-p 1.
 - **Generation:** batched across all rollouts of a step.
+
+![Training curves](results/training_curves.png)
+
+Training reward is noisy at 40 rollouts per step, but both runs trend upward, and **searches per
+rollout rise steadily from about 1.0 to 1.3–1.45**. That is the same behaviour as the paper's
+Figure 2(d) ("the LLM learns to call search more"), at a far smaller scale.
 
 ## Search traces (released PPO checkpoint)
 
@@ -164,16 +191,29 @@ Full traces are in [results/traces/](results/traces/).
   render through the Qwen chat template, and all seven reward scenarios score as their labels
   say (correct format and equation 1/1; wrong result 1/0; missing think block 0/1; unused
   number 1/0; duplicate inputs 1/1; division by zero 1/0; missing tags 0/0).
-- **Modal 20-step run of its own `train.py`** (A100-80GB, unmodified apart from the output path
-  and step count):
-  - *First attempt:* crash-looped before training because of a bug in our launcher (an
-    import-time path check that only holds locally); fixed with `modal.is_local()`.
-  - *Second attempt:* the step-0 held-out evaluation ran (solve rate **5.5%**, format **32.0%**,
-    56.6 s). Then the first training step ran **out of GPU memory** (79.2 GiB in use). The starter
-    is sized for the B300 (288 GB) in its own `modal_train.py`: 16 generations of 1,024 tokens,
-    a training batch of 16, no gradient checkpointing, and vLLM reserving 30% of the GPU.
-  - *Not retried tonight.* A B300 costs $7.10/hour, and reducing the batch or enabling gradient
-    checkpointing would no longer be the unmodified starter.
+- **Modal runs of its own `train.py`** (A100-80GB):
+  - *Full settings:* the first attempt crash-looped before training because of a bug in our
+    launcher (an import-time path check that only holds locally), fixed with `modal.is_local()`.
+    The second attempt ran the step-0 held-out evaluation (solve rate 5.5%, format 32.0%), then
+    the first training step ran **out of GPU memory** (79.2 GiB in use). The starter is sized for
+    the B300 (288 GB) in its own `modal_train.py`: 16 generations of 1,024 tokens, a training
+    batch of 16, no gradient checkpointing, and vLLM reserving 30% of the GPU.
+  - *Scaled-down replication (completed):* the same `train.py` with only three settings reduced to
+    fit 80 GB: `per_device_train_batch_size` 16 → 8, `num_generations` 16 → 8 and
+    `max_completion_length` 1,024 → 512. The LoRA configuration, learning rate, β, rewards,
+    dataset, vLLM colocation and evaluation schedule are unchanged, and the run is 20 steps
+    (`scripts/run_starter.py --reduced`). Training took 258 s.
+
+    | Held-out evaluation | Step 0 | Step 10 | Step 20 |
+    |---|---:|---:|---:|
+    | Solve rate (equation reward) | 5.5% | 4.0% | 4.0% |
+    | Format reward | 33.0% | 59.0% | 76.5% |
+
+    This is the starter's characteristic early phase: the model first learns the required
+    `<think>…</think>
+<answer>…</answer>` format (33% → 76.5%), while arithmetic accuracy only
+    improves over many more of the starter's 2,000 steps. Twenty steps reproduce the format
+    learning, not the later "aha" gains in solve rate.
 
 ## Training scale vs the paper
 
@@ -182,8 +222,10 @@ Full traces are in [results/traces/](results/traces/).
 | Fine-tuning | Full model (actor, and a full critic for PPO) | Rank-16 LoRA (actor; plus critic LoRA and value head for PPO) |
 | Hardware | 8 × H100 | 1 × L40S |
 | Prompts per step | 512 | GRPO 8 (×5 samples = 40 rollouts); PPO 40 |
-| Training steps | 500 (paper text; v0.2 scripts use 1,005) | in progress (≈40 per algorithm expected) |
-| Rollouts in total | GRPO ≈ 1.28M, PPO ≈ 256k | in progress (≈1,600 per algorithm expected) |
+| Training steps | 500 (paper text; v0.2 scripts use 1,005) | GRPO 40, PPO 39 (100-minute wall-clock budget each) |
+| Rollouts in total | GRPO ≈ 1.28M, PPO ≈ 256k | GRPO 1,600 (0.13% of the paper), PPO 1,560 (0.6%) |
+| Trainable parameters | All ~3.1B (plus a full critic for PPO) | Actor LoRA 29.9M (~1%); PPO critic LoRA + value head 29.9M |
+| Learning rate | 1e-6 actor / 1e-5 critic, with warm-up | 2e-5 actor / 1e-4 critic (LoRA), no warm-up |
 | Training data | Full NQ + HotpotQA train merge (~170k) | 4,000-question frozen subset |
 
 ## Cost (Modal, shared class workspace)
@@ -193,9 +235,12 @@ Full traces are in [results/traces/](results/traces/).
 | Retrieval assets download and corpus repair | CPU | $0.06 |
 | Data preparation | CPU | $0.01 |
 | Direct Inference | L4 | $0.16 |
-| Released GRPO + PPO evaluation (incl. one failed launch) | L40S + 96 GiB RAM | ≈ $2.20 |
-| Starter 20-step run (two attempts) | A100-80GB | ≈ $0.60 |
-| LoRA GRPO + PPO training | L40S + 96 GiB RAM | in progress (≈ $10 expected) |
+| Released GRPO + PPO evaluation (incl. one failed launch) | L40S + 96 GiB RAM | ≈ $2.40 |
+| Starter 20-step runs (crash-loop, OOM, scaled-down success) | A100-80GB | ≈ $1.30 |
+| LoRA GRPO + PPO training (6,217 s + 6,126 s) | L40S + 96 GiB RAM | ≈ $10.60 |
+| Our two adapters' evaluation (384 s + 450 s, incl. one launch with a wrong checkpoint path) | L40S + 96 GiB RAM | ≈ $0.85 |
+| Untrained-with-search baseline evaluation (357 s) | L40S + 96 GiB RAM | ≈ $0.31 |
+| **Total** | | **≈ $15.70** |
 | Retrieval volume storage (~74 GiB at $0.09/GiB-month) | — | ≈ $0.22/day |
 
 Costs are computed from Modal's published rates (`modal billing rates`) and measured container

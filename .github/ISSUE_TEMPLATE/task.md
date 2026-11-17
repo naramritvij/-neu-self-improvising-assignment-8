@@ -3,8 +3,8 @@ name: Assignment task
 about: Track an implementation, experiment or review task
 ---
 
-## Owner
-Ritvij / Ghouse / shared
+## Area
+starter / data / retrieval / training / report
 
 ## Planned work
 

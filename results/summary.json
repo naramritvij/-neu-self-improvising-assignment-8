@@ -13,6 +13,20 @@
       "mean_searches": 0.0,
       "seconds_per_question": 0.27
     },
+    "base_search": {
+      "run": "eval-base-search",
+      "em": 0.12,
+      "correct": 15,
+      "n": 125,
+      "paper_em": null,
+      "invalid_or_empty_answers": 20,
+      "stop_reasons": {
+        "max_turns": 20,
+        "answer": 105
+      },
+      "mean_searches": 1.13,
+      "seconds_per_question": 2.73
+    },
     "released_grpo": {
       "run": "released-grpo-v02b",
       "em": 0.272,
@@ -42,18 +56,61 @@
       "seconds_per_question": 2.53
     },
     "own_grpo": {
-      "status": "missing"
+      "run": "eval-own-grpo",
+      "em": 0.24,
+      "correct": 30,
+      "n": 125,
+      "paper_em": 0.232,
+      "invalid_or_empty_answers": 1,
+      "stop_reasons": {
+        "answer": 124,
+        "max_turns": 1
+      },
+      "mean_searches": 1.38,
+      "seconds_per_question": 3.46
     },
     "own_ppo": {
-      "status": "missing"
+      "run": "eval-own-ppo",
+      "em": 0.192,
+      "correct": 24,
+      "n": 125,
+      "paper_em": 0.264,
+      "invalid_or_empty_answers": 0,
+      "stop_reasons": {
+        "answer": 125
+      },
+      "mean_searches": 1.34,
+      "seconds_per_question": 2.89
     }
   },
   "training": {
     "grpo": {
-      "status": "missing"
+      "run": "grpo-short",
+      "status": "completed",
+      "steps": 40,
+      "rollouts_per_step": 40,
+      "total_rollouts": 1600,
+      "mean_seconds_per_step": 154.0,
+      "reward_first5": 0.225,
+      "reward_last5": 0.3,
+      "mean_searches_first5": 1.08,
+      "mean_searches_last5": 1.28,
+      "actor_trainable_parameters": 29933568,
+      "critic_trainable_parameters": 0
     },
     "ppo": {
-      "status": "missing"
+      "run": "ppo-short",
+      "status": "completed",
+      "steps": 39,
+      "rollouts_per_step": 40,
+      "total_rollouts": 1560,
+      "mean_seconds_per_step": 155.1,
+      "reward_first5": 0.185,
+      "reward_last5": 0.33,
+      "mean_searches_first5": 1.1,
+      "mean_searches_last5": 1.35,
+      "actor_trainable_parameters": 29933568,
+      "critic_trainable_parameters": 29935617
     }
   }
 }

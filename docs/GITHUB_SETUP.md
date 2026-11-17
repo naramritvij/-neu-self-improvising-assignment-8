@@ -11,12 +11,12 @@ git clone https://github.com/naramritvij/-neu-self-improvising-assignment-8.git 
 cd assignment-8
 ```
 
-Ritvij will invite Ghouse through Settings → Collaborators. Do not invent his
+Collaborators are added through Settings → Collaborators. Do not invent a
 GitHub handle, change repository visibility or grant access to another person.
 
-Use `ritvij/grpo` and `ghouse/ppo` for independent tracks. Main holds the shared
+Use feature branches for independent work. Main holds the shared
 implementation. Review each other's changes and record actual work in
-CONTRIBUTIONS.md.
+the project log (docs/CONTRIBUTIONS.md).
 
 The CI workflow runs CPU tests only. It does not authenticate to Modal, start
 GPU jobs or download model weights. Its presence is not evidence that a specific

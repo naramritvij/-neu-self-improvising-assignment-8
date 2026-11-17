@@ -19,15 +19,16 @@ image=(modal.Image.from_registry('nvidia/cuda:13.1.1-devel-ubuntu24.04',add_pyth
 
 @app.function(image=image,gpu=os.environ.get('MODAL_STARTER_GPU','B300'),cpu=8,memory=32768,
               timeout=86400,volumes={'/vol':volume})
-def run(smoke: bool,steps: int,run_name: str):
+def run(smoke: bool,steps: int,run_name: str,reduced: bool=False):
     import re
     if run_name in {'.','..'} or not re.fullmatch(r'[A-Za-z0-9_.-]+',run_name): raise ValueError('Invalid run name')
     cmd=['python','/app/scripts/run_starter.py','--output',f'/vol/starter/{run_name}','--steps',str(steps)]
     if smoke: cmd+=['--smoke']
+    if reduced: cmd+=['--reduced']
     try: subprocess.run(cmd,check=True)
     finally: volume.commit()
 
 @app.local_entrypoint()
-def main(run_name: str='starter-smoke',steps: int=2000,full: bool=False,acknowledge_compute: bool=False):
+def main(run_name: str='starter-smoke',steps: int=2000,full: bool=False,reduced: bool=False,acknowledge_compute: bool=False):
     if not acknowledge_compute: raise ValueError('Check your workspace/budget, then add --acknowledge-compute')
-    run.remote(not full,steps,run_name)
+    run.remote(not full,steps,run_name,reduced)

@@ -48,4 +48,4 @@ For each real run save the git revision, environment, GPU, dataset hashes, base
 revision, adapter settings, retrieval provenance, seed, budgets, complete logs,
 checkpoint and predictions. Use the fixed-budget checkpoint or independent
 validation for selection, not Bamboogle. One seed does not establish a robust
-algorithm ranking. Both members review the final report and contribution log.
+algorithm ranking. We review the final report before submission.

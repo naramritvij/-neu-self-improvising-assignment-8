@@ -1,6 +1,6 @@
 # Source register
 
-Course requirements come from the screenshots supplied by Ritvij. They are not
+Course requirements come from the assignment screenshots we were given. They are not
 replaced by classmates' proposed hyperparameters. See ASSIGNMENT_SCOPE.md.
 
 ## Class starter

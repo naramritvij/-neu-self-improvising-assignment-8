@@ -85,7 +85,7 @@ def main():
     a=p.parse_args(); results=collect(a.runs_root); a.output_dir.mkdir(parents=True,exist_ok=True)
     measured={x['method']:x for x in results}; lines=[
       '# Search-R1 replication — experiment report','',
-      '**Team:** Ritvij and Ghouse. **Course:** INFO 7375, Week 08.','',
+      '**Authors:** Ritvij Naram and Ghouse. **Course:** INFO 7375, Week 08.','',
       '**Status:** '+('Measured runs are listed below; inspect missing rows and parity limitations before submission.' if results else
                          'NOT SUBMISSION-READY: no Qwen/Bamboogle experiment results have been produced.'),'',
       '## Results','',

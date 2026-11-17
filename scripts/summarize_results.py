@@ -9,8 +9,8 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PAPER = {'direct': 0.024, 'released_grpo': 0.232, 'released_ppo': 0.264, 'own_grpo': 0.232, 'own_ppo': 0.264}
-EVALS = {'direct': 'direct-v1', 'released_grpo': 'released-grpo-v02b', 'released_ppo': 'released-ppo-v02b',
+PAPER = {'direct': 0.024, 'base_search': None, 'released_grpo': 0.232, 'released_ppo': 0.264, 'own_grpo': 0.232, 'own_ppo': 0.264}
+EVALS = {'direct': 'direct-v1', 'base_search': 'eval-base-search', 'released_grpo': 'released-grpo-v02b', 'released_ppo': 'released-ppo-v02b',
          'own_grpo': 'eval-own-grpo', 'own_ppo': 'eval-own-ppo'}
 TRAIN = {'grpo': 'grpo-short', 'ppo': 'ppo-short'}
 
